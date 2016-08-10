@@ -1,0 +1,5 @@
+data/test_trim1.fastq
+Total reads: 9
+Quality score failed reads: 2
+Length failed reads: 2
+Filtered reads: 5 (55.5556%)
