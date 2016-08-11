@@ -16,7 +16,8 @@ def iterate_bowtie_out_file(bt_fn):
         fields = line.strip('\n').split('\t')
         if len(fields) != 8:
             raise ValueError("Number of fields not equal to 8: %s" % line)
-        rec = BowtieRecord._make(fields)
+        rec = BowtieRecord(fields[0], fields[1], fields[2], int(fields[3]), 
+                           fields[4], fields[5], int(fields[6]), fields[7])
         if rec.strand not in ('+', '-'):
             raise ValueError("Strand not +/-: %s" % line)
         yield rec
@@ -32,6 +33,9 @@ class BowtieRecordCounter(object):
         self.align_count_dict = {}
 
     def insert_bt_rec_ntup(self, bt_rec_ntup):
+        if bt_rec_ntup.aln_lcoord_b0 >= self.ref_length:
+            raise ValueError("Alignment start >= ref length. %s" % bt_rec_ntup._asdict())
+        
         if bt_rec_ntup.strand == '+':
             tx_start_pos_b0 = bt_rec_ntup.aln_lcoord_b0
         else:
