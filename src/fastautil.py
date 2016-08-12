@@ -29,8 +29,6 @@ class SingleEntryFastaFile(object):
 
         ref_genome_file.close()
 
-        ref_len = len(ref_seq)
-
         return (description, ref_seq)
 
         
