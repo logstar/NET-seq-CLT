@@ -1,5 +1,6 @@
 #!/usr/bin/env python2.7
 import sys
+RC_CUTOFF = 20
 
 def get_tss_read_count_dict(in_fn):
 	tss_read_count_dict = {}
@@ -62,12 +63,12 @@ def get_tss_list(tss_read_count_dict, ref_str):
 	pos_count = 0
 	neg_count = 0
 
-	num_pos_a50_coords = 0 #Number of positions on + strand with read count >= 50
+	num_pos_arc_coords = 0 #Number of positions on + strand with read count >= Read count cutoff
 	num_pos_tie_coords = 0 
 	#Number of Positions on + strand are local maxima and have local ties within 11bp
 	num_pos_lm = 0 #Number of positions on + strand with RC >= 50 and no higher RC within 11bp
 	num_pos_tss = 0 #Number of TSSs on + strand
-	num_neg_a50_coords = 0
+	num_neg_arc_coords = 0
 	num_neg_tie_coords = 0
 	num_neg_lm = 0
 	num_neg_tss = 0
@@ -80,8 +81,8 @@ def get_tss_list(tss_read_count_dict, ref_str):
 				if window_range[i] >= ref_length:
 					window_range[i] = window_range[i] - ref_length
 
-		if pos_count >= 50:
-			num_pos_a50_coords += 1
+		if pos_count >= RC_CUTOFF:
+			num_pos_arc_coords += 1
 			is_lm = True #is local maxima
 			has_lt = False #has local tie
 			for local_position_b0 in window_range:
@@ -116,8 +117,8 @@ def get_tss_list(tss_read_count_dict, ref_str):
 
 					tss_list.append('\t'.join([str(position_b0), '+', seq] + pos_count_window))
 	
-		if neg_count >= 50:
-			num_neg_a50_coords += 1
+		if neg_count >= RC_CUTOFF:
+			num_neg_arc_coords += 1
 			is_lm = True
 			has_lt = False
 			for local_position_b0 in window_range:
@@ -156,18 +157,18 @@ def get_tss_list(tss_read_count_dict, ref_str):
 		
 	stats_str = "# Reads aligned to + strand: %d\n" % sum_pos_rc
 	stats_str += "# coordinates in + strand have read count > 0: %d\n" % num_pos_coords_have_count
-	stats_str += "# coordinates in + strand have read count >= 50: %d\n" % num_pos_a50_coords
-	stats_str += "# local maxima in + strand (coordinates in + strand have read count >= 50 \
-with no higer read count in the local 11bp window): %d\n" % num_pos_lm
+	stats_str += "# coordinates in + strand have read count >= %d: %d\n" % (RC_CUTOFF, num_pos_arc_coords)
+	stats_str += "# local maxima in + strand (coordinates in + strand have read count >= %d \
+with no higer read count in the local 11bp window): %d\n" % (RC_CUTOFF, num_pos_lm)
 	stats_str += "# local maxima in + strand have local tie: %d\n" % num_pos_tie_coords
 	stats_str += "# TSS in + strand: %d\n" % num_pos_tss
 
 	stats_str += '--------------------------------------------------------\n'
 	stats_str += "# Reads aligned to - strand: %d\n" % sum_neg_rc
 	stats_str += "# coordinates in - strand have read count > 0: %d\n" % num_neg_coords_have_count
-	stats_str += "# coordinates in - strand have read count >= 50: %d\n" % num_neg_a50_coords
-	stats_str += "# local maxima in - strand (coordinates in - strand have read count >= 50 \
-with no higer read count in the local 11bp window): %d\n" % num_neg_lm
+	stats_str += "# coordinates in - strand have read count >= %d: %d\n" % (RC_CUTOFF, num_neg_arc_coords)
+	stats_str += "# local maxima in - strand (coordinates in - strand have read count >= %d \
+with no higer read count in the local 11bp window): %d\n" % (RC_CUTOFF, num_neg_lm)
 	stats_str += "# local maxima in - strand have local tie: %d\n" % num_neg_tie_coords
 	stats_str += "# TSS in - strand: %d\n" % num_neg_tss
 
