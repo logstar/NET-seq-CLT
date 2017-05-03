@@ -21,11 +21,11 @@ class SingleEntryFastaFile(object):
         for line in ref_genome_file:
             linenum += 1
             if linenum == 1:
-                description = line[:-1]
+                description = line.strip()
             else:
                 if line[0] == '>':
                     raise ValueError("Input file has more than 1 record (>xxx).")
-                ref_seq += line[:-1]
+                ref_seq += line.strip()
 
         ref_genome_file.close()
 
