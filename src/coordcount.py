@@ -94,7 +94,15 @@ class CoordCountTable(object):
             assert len(right_range) == num_up_bp
         
         return (left_range, right_range)
-        
+    
+    def to_artemis_count_tbl(self, ofn):
+        with open(ofn, 'w') as ofile:
+            ofile.write('# BASE\tpos_strand_count\tneg_strand_count\n')
+            ofile.write('# color\t5:150:55\t50:50:120\n')
+
+            for coord in self.coord_cnt_dict:
+                ofile.write('\t'.join(map(str, (coord + 1, self.coord_cnt_dict[coord].fwd_cnt, -self.coord_cnt_dict[coord].rev_cnt))) + '\n')
+    
     @staticmethod
     def rev_comp(seq):
         refd = dict(zip('ACGTacgt','TGCAtgca'))
