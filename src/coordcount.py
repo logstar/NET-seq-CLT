@@ -106,6 +106,12 @@ class CoordCountTable(object):
                 else:
                     ofile.write('\t'.join(map(str, (coord + 1, self.coord_cnt_dict[coord].fwd_cnt, -self.coord_cnt_dict[coord].rev_cnt))) + '\n')
     
+    def to_strand_reverse_count_tbl(self, ofn):
+        with open(ofn, 'w') as ofile:
+            for coord in sorted(self.coord_cnt_dict.keys()):
+                ofile.write('\t'.join(map(str, (coord, self.coord_cnt_dict[coord].rev_cnt, self.coord_cnt_dict[coord].fwd_cnt))) + '\n')
+
+    
     @staticmethod
     def rev_comp(seq):
         refd = dict(zip('ACGTacgt','TGCAtgca'))
