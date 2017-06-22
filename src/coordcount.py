@@ -57,8 +57,9 @@ class CoordCountTable(object):
 
         return (seq, tuple(count_list))
         
+    # coord has to be integer
     def get_left_right_range(self, coord, strand, num_up_bp, num_down_bp):
-        assert coord < self.ref_genome.ref_seq_len, 'Coord %s >= ref genome len' % coord
+        assert coord < self.ref_genome.ref_seq_len, 'Coord %d >= ref genome len' % coord
         assert coord >= 0, 'Coord %s < 0' % coord
         
         assert strand in ('+', '-'), 'Strand %s not equal to + or -' % strand
