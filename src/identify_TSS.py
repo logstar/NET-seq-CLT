@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.7
 import sys
-RC_CUTOFF = 20
+RC_CUTOFF = 25
 
 def get_tss_read_count_dict(in_fn):
 	tss_read_count_dict = {}
