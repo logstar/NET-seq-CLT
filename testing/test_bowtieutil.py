@@ -1,13 +1,7 @@
 #!/usr/bin/env python2.7
-import sys
 import unittest
-import os
-abspath = os.path.abspath(__file__)
-dname = os.path.dirname(abspath)
-os.chdir(dname)
-
-sys.path.append('../src')
-import bowtieutil as bu
+import env
+import src.bowtieutil as bu
 
 class TestIterator(unittest.TestCase):
     def test_tuple_order(self):

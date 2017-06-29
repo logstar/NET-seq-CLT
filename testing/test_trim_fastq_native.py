@@ -1,13 +1,7 @@
 #!/usr/bin/env python2.7
-import sys
 import unittest
-import os
-abspath = os.path.abspath(__file__)
-dname = os.path.dirname(abspath)
-os.chdir(dname)
-
-sys.path.append('../src')
-import trim_fastq_native as tf
+import env
+import src.trim_fastq_native as tf
 
 class TestTrimFastq(unittest.TestCase):
     def test_result(self):

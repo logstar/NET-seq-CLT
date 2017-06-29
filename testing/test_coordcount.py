@@ -1,13 +1,7 @@
 #!/usr/bin/env python2.7
-import sys
 import unittest
-import os
-abspath = os.path.abspath(__file__)
-dname = os.path.dirname(abspath)
-os.chdir(dname)
-
-sys.path.append('../src')
-import coordcount as cc
+import env
+import src.coordcount as cc
 
 class TestCoordCountTable(unittest.TestCase):
     def setUp(self):

@@ -1,13 +1,7 @@
 #!/usr/bin/env python2.7
-import sys
 import unittest
-import os
-abspath = os.path.abspath(__file__)
-dname = os.path.dirname(abspath)
-os.chdir(dname)
-
-sys.path.append('../src')
-import fastautil as fa
+import env
+import src.fastautil as fa
 
 class TestSingleEntryFastaFile(unittest.TestCase):
     def test_seq_len(self):
