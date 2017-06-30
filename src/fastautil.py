@@ -11,6 +11,15 @@ class SingleEntryFastaFile(object):
     def get_seq(self, start_ind, end_ind):
         return self.ref_seq[start_ind:end_ind]
 
+    def get_circularized_seq(self, start_ind, num_bp):
+        if num_bp < 0:
+            raise ValueError("num_bp must be positive")
+        end_ind = start_ind + num_bp
+        if end_ind <= len(self.ref_seq):
+            return self.ref_seq[start_ind:end_ind]
+        else:
+            return self.ref_seq[start_ind:] + self.ref_seq[:end_ind - len(self.ref_seq)]
+
     @staticmethod
     def get_fasta_header_seq(file_path):
         ref_genome_file = open(file_path)
