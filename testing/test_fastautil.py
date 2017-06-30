@@ -48,6 +48,13 @@ class TestSingleEntryFastaFile(unittest.TestCase):
         self.assertEqual(test_fa_instance.get_circularized_seq(45, 24), 'ACGTA' + 'C' * 16 + 'ACG')
         self.assertEqual(test_fa_instance.get_circularized_seq(45, 25), 'ACGTA' + 'C' * 16 + 'ACGT')
         self.assertEqual(test_fa_instance.get_circularized_seq(45, 26), 'ACGTA' + 'C' * 16 + 'ACGTA')
+        self.assertEqual(test_fa_instance.get_circularized_seq(45, 21 + 66), 'ACGTA' + 'C' * 16 + test_fa_instance.ref_seq)
+
+        self.assertEqual(test_fa_instance.get_circularized_seq(45, 21 + 67), 'ACGTA' + 'C' * 16 + test_fa_instance.ref_seq + 'A')
+        self.assertEqual(test_fa_instance.get_circularized_seq(45, 21 + 68), 'ACGTA' + 'C' * 16 + test_fa_instance.ref_seq + 'AC')
+        self.assertEqual(test_fa_instance.get_circularized_seq(45, 21 + 69), 'ACGTA' + 'C' * 16 + test_fa_instance.ref_seq + 'ACG')
+        self.assertEqual(test_fa_instance.get_circularized_seq(45, 21 + 70), 'ACGTA' + 'C' * 16 + test_fa_instance.ref_seq + 'ACGT')
+        self.assertEqual(test_fa_instance.get_circularized_seq(45, 21 + 71), 'ACGTA' + 'C' * 16 + test_fa_instance.ref_seq + 'ACGTA')
 
 
 if __name__ == '__main__':
