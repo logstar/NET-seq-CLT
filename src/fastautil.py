@@ -19,6 +19,7 @@ class SingleEntryFastaFile(object):
         if end_ind <= len(self.ref_seq):
             return self.ref_seq[start_ind:end_ind]
         else:
+            # when num_bp covers more than 2 copies of whole sequence
             extra_bp_after_one_complete_seq = end_ind - len(self.ref_seq)
             num_whole_seq = extra_bp_after_one_complete_seq / len(self.ref_seq)
             num_trail_bp = extra_bp_after_one_complete_seq % len(self.ref_seq)
