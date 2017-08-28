@@ -25,12 +25,12 @@ def rev_comp(seq):
         return rcseq
 
 def str_read_genome(ref_genome_file):
-    description = ref_genome_file.readline()[:-1]
-    ref_seq_line = ref_genome_file.readline()[:-1]
+    description = ref_genome_file.readline().strip()
+    ref_seq_line = ref_genome_file.readline().strip()
     ref_seq = ''
     while ref_seq_line != '':
         ref_seq = ref_seq + ref_seq_line
-        ref_seq_line = ref_genome_file.readline()[:-1]
+        ref_seq_line = ref_genome_file.readline().strip()
 
     return ref_seq
 
