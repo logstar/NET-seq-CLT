@@ -2,8 +2,8 @@
 import sys
 import coordcount
 
-NUM_UP_BP = 50
-NUM_DOWN_BP = 50
+NUM_UP_BP = 200
+NUM_DOWN_BP = 200
 
 def is_valid_strand(strand):
     if strand in ('+', '-'):
