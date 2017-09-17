@@ -1,5 +1,9 @@
 # python2.7 notice: use of integer division. 
 import dnautil
+import collections as cl
+
+FastaQuery = cl.namedtuple('FastaQuery', ['coord', 'num_up_bp', 'num_down_bp', 'strand'])
+FastaQueryResult = cl.namedtuple('FastaQuery', ['coord', 'num_up_bp', 'num_down_bp', 'strand', 'seq'])
 
 class SingleEntryFastaFile(object):
     """Simple class for manipulating single record fasta file"""
