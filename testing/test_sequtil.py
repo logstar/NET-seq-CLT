@@ -35,7 +35,45 @@ class TestGetSeqMatchLen(unittest.TestCase):
         self.assertEqual(su.get_seq_match_len('', 'A'), 0)
 
 
+class TestTargetSeqMatchLenCounter(unittest.TestCase):
+    def test_counter(self):
+        tseq_cnter = su.TargetSeqMatchLenCounter('ACGTACG')
+        self.assertEqual(len(tseq_cnter._mlen_cnt_dict), 0)
 
+        self.assertEqual(tseq_cnter._mlen_cnt_dict[0], 0)
+        self.assertEqual(tseq_cnter._mlen_cnt_dict[0], 0)
+        self.assertEqual(tseq_cnter._mlen_cnt_dict[1], 0)
+
+        tseq_cnter.add_query_seq('CCGTACG')
+        self.assertEqual(tseq_cnter._mlen_cnt_dict[0], 1)
+        self.assertEqual(tseq_cnter._mlen_cnt_dict[1], 0)
+
+        tseq_cnter.add_query_seq('ACGTACG')
+        self.assertEqual(tseq_cnter._mlen_cnt_dict[0], 1)
+        self.assertEqual(tseq_cnter._mlen_cnt_dict[1], 0)
+        self.assertEqual(tseq_cnter._mlen_cnt_dict[7], 1)
+
+        tseq_cnter.add_query_seq('')
+        self.assertEqual(tseq_cnter._mlen_cnt_dict[0], 2)
+        self.assertEqual(tseq_cnter._mlen_cnt_dict[1], 0)
+        self.assertEqual(tseq_cnter._mlen_cnt_dict[7], 1)
+
+
+        tseq_cnter.add_query_seq('ACATGACBDSP')
+        self.assertEqual(tseq_cnter._mlen_cnt_dict[0], 2)
+        self.assertEqual(tseq_cnter._mlen_cnt_dict[1], 0)
+        self.assertEqual(tseq_cnter._mlen_cnt_dict[2], 1)
+        self.assertEqual(tseq_cnter._mlen_cnt_dict[7], 1)
+
+        tseq_cnter.add_query_seq('ACGTACG')
+        tseq_cnter.add_query_seq('ACGTACG')
+        tseq_cnter.add_query_seq('ACGTACG')
+        tseq_cnter.add_query_seq('ACGTACG')
+        tseq_cnter.add_query_seq('ACGTACG')
+        self.assertEqual(tseq_cnter._mlen_cnt_dict[7], 6)
+        self.assertEqual(tseq_cnter._mlen_cnt_dict[0], 2)
+        self.assertEqual(tseq_cnter._mlen_cnt_dict[1], 0)
+        self.assertEqual(tseq_cnter._mlen_cnt_dict[2], 1)
 
 
 if __name__ == '__main__':
