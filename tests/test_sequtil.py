@@ -75,6 +75,33 @@ class TestTargetSeqMatchLenCounter(unittest.TestCase):
         self.assertEqual(tseq_cnter._mlen_cnt_dict[1], 0)
         self.assertEqual(tseq_cnter._mlen_cnt_dict[2], 1)
 
+    def test_to_list(self):
+        tseq_cnter = su.TargetSeqMatchLenCounter('ACGTACG')
+        self.assertEqual(tseq_cnter.to_list(), [tseq_cnter._target_seq] + zip(xrange(10, 51), [0] * 41))
+        self.assertEqual(tseq_cnter.to_list(), [tseq_cnter._target_seq] + zip(xrange(10, 51), [0] * 41))
+
+        self.assertEqual(tseq_cnter.to_list(min_mlen = 0, max_mlen = 20), [tseq_cnter._target_seq] + zip(xrange(0, 21), [0] * 22))
+
+        tseq_cnter.add_query_seq('CCGTACG')
+        self.assertEqual(tseq_cnter.to_list(min_mlen = 0, max_mlen = 20), [tseq_cnter._target_seq] + zip(xrange(0, 21), [1] + [0] * 21))
+
+        tseq_cnter.add_query_seq('ACGTACG')
+        tseq_cnter.add_query_seq('')
+        self.assertEqual(tseq_cnter.to_list(min_mlen = 0, max_mlen = 20), 
+                         [tseq_cnter._target_seq] + zip(xrange(0, 21), [2] + [0] * 6 + [1] + [0] * 13))
+
+        tseq_cnter.add_query_seq('ACATGACBDSP')
+        self.assertEqual(tseq_cnter.to_list(min_mlen = 0, max_mlen = 20), 
+                         [tseq_cnter._target_seq] + zip(xrange(0, 21), [2, 0, 1] + [0] * 4 + [1] + [0] * 13))
+
+        tseq_cnter.add_query_seq('ACGTACG')
+        tseq_cnter.add_query_seq('ACGTACG')
+        tseq_cnter.add_query_seq('ACGTACG')
+        tseq_cnter.add_query_seq('ACGTACG')
+        tseq_cnter.add_query_seq('ACGTACG')
+        self.assertEqual(tseq_cnter.to_list(min_mlen = 0, max_mlen = 20), 
+                         [tseq_cnter._target_seq] + zip(xrange(0, 21), [2, 0, 1] + [0] * 4 + [6] + [0] * 13))
+
 
 if __name__ == '__main__':
     unittest.main()

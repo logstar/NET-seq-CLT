@@ -23,8 +23,13 @@ class TargetSeqMatchLenCounter(object):
         mlen = get_seq_match_len(self._target_seq, query_seq)
         self._mlen_cnt_dict[mlen] += 1
 
-    def to_list(self):
-        tseq_cnt_list = [self._target_seq] + map(lambda i: self._mlen_cnt_dict[i],
-                                                 xrange(len(self._target_seq) + 1))
+    # max_mlen: max output matched length, default 50.
+    # min_mlen: min output matched length, default 10.
+    def to_list(self, min_mlen = 10, max_mlen = 50):
+        if min_mlen < 0 or max_mlen < 0:
+            raise ValueError("min_mlen and max_mlen should both >= 0")
+
+        tseq_cnt_list = [self._target_seq] + map(lambda mlen: (mlen, self._mlen_cnt_dict[mlen]),
+                                                 xrange(min_mlen, max_mlen + 1))
 
         return tseq_cnt_list
