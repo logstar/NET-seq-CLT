@@ -29,6 +29,9 @@ class TargetSeqMatchLenCounter(object):
         if min_mlen < 0 or max_mlen < 0:
             raise ValueError("min_mlen and max_mlen should both >= 0")
 
+        if min_mlen >= max_mlen:
+            raise ValueError("min_mlen should < max_mlen")
+
         tseq_cnt_list = [self._target_seq] + map(lambda mlen: (mlen, self._mlen_cnt_dict[mlen]),
                                                  xrange(min_mlen, max_mlen + 1))
 

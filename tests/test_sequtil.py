@@ -4,21 +4,21 @@ import env
 import src.sequtil as su
 
 class TestGetSeqMatchLen(unittest.TestCase):
-    def all_matched(self):
+    def test_all_matched(self):
         self.assertEqual(su.get_seq_match_len('ACGTT', 'ACGTT'), 5)
         self.assertEqual(su.get_seq_match_len('A', 'A'), 1)
         self.assertEqual(su.get_seq_match_len('AC', 'AC'), 2)
         self.assertEqual(su.get_seq_match_len('CAG', 'CAG'), 3)
         self.assertEqual(su.get_seq_match_len('cxaA', 'cxaA'), 4)
 
-    def mismatched(self):
+    def test_mismatched(self):
         self.assertEqual(su.get_seq_match_len('CCGTT', 'ACGTT'), 0)
         self.assertEqual(su.get_seq_match_len('A', 'C'), 0)
         self.assertEqual(su.get_seq_match_len('AC', 'AG'), 1)
         self.assertEqual(su.get_seq_match_len('CAG', 'CAa'), 2)
         self.assertEqual(su.get_seq_match_len('cxaA', 'cxax'), 3)
 
-    def different_len(self):
+    def test_different_len(self):
         self.assertEqual(su.get_seq_match_len('A', 'AC'), 1)
         self.assertEqual(su.get_seq_match_len('A', 'ACG'), 1)
         self.assertEqual(su.get_seq_match_len('A', 'ACGT'), 1)
@@ -29,7 +29,7 @@ class TestGetSeqMatchLen(unittest.TestCase):
         self.assertEqual(su.get_seq_match_len('AAGGG', 'ACGGGGGGGGG'), 1)
         self.assertEqual(su.get_seq_match_len('GACGGG', 'ACGGGGGGGGG'), 0)
 
-    def empty_str(self):
+    def test_empty_str(self):
         self.assertEqual(su.get_seq_match_len('', 'ACGGGGGGGGG'), 0)
         self.assertEqual(su.get_seq_match_len('', ''), 0)
         self.assertEqual(su.get_seq_match_len('', 'A'), 0)
@@ -102,6 +102,26 @@ class TestTargetSeqMatchLenCounter(unittest.TestCase):
         self.assertEqual(tseq_cnter.to_list(min_mlen = 0, max_mlen = 20), 
                          [tseq_cnter._target_seq] + zip(xrange(0, 21), [2, 0, 1] + [0] * 4 + [6] + [0] * 13))
 
+    def test_to_list_exceptions(self):
+        tseq_cnter = su.TargetSeqMatchLenCounter('ACGTACG')
 
+        with self.assertRaises(ValueError):
+            tseq_cnter.to_list(0, 0)
+
+        with self.assertRaises(ValueError):
+            tseq_cnter.to_list(1, 1)
+
+        with self.assertRaises(ValueError):
+            tseq_cnter.to_list(1, 0)
+
+        with self.assertRaises(ValueError):
+            tseq_cnter.to_list(-1, 0)
+
+        with self.assertRaises(ValueError):
+            tseq_cnter.to_list(0, -1)
+
+        with self.assertRaises(ValueError):
+            tseq_cnter.to_list(-2, -1)
+        
 if __name__ == '__main__':
     unittest.main()
