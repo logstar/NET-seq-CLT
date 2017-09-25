@@ -24,7 +24,7 @@ def remove_duplicated_reads(num_qc_bp, qcutoff, dc_len, ifn, ofn):
     print('Sequencing reads shorther than {}'.format(dc_len))
     print('Length\tCount')
     for short_read_len in sorted(short_read_cnter.keys()):
-        print('%d\t%d'.format(short_read_len, short_read_cnter[short_read_len]))
+        print('{}\t{}'.format(short_read_len, short_read_cnter[short_read_len]))
         
     return
 
