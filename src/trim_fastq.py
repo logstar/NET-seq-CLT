@@ -1,5 +1,5 @@
 #!/usr/bin/env python2.7
-import sys
+import argparse
 import fastqutil
 
 def trim_fastq(i_fn_list, trim_beg_ind, final_length, qcutoff, o_stat_fn, o_fastq_fn):
@@ -37,29 +37,31 @@ def trim_fastq(i_fn_list, trim_beg_ind, final_length, qcutoff, o_stat_fn, o_fast
     return
 
 def main():
-    argv = sys.argv
-    if len(argv) <= 6:
-        sys.stderr.write('Usage:\n%s [Phred quality score cutoff (>=)] [5\' trim length] \
-[final sequence length] <output stats> <output trimmed FASTQ file> \
-<input fastq files (separated by space)>\n' % argv[0])
-        return -2
+    arg_parser = argparse.ArgumentParser()
 
-    qc = int(argv[1])
-    if qc < 0 or qc > 93:
-        sys.stderr.write('Quality score cutoff should >= 0 and <= 93')
-        return -1
+    arg_parser.add_argument('qc_int', type = int,
+                            metavar = '<Phred quality score cutoff>',
+                            help = 'FASTQ per base Phred quality score cutoff.'
+                                   'Discard reads with quality score < qcutoff')
 
-    qcutoff = chr(qc + 33)
+    arg_parser.add_argument('trim_beg_ind', type = int,
+                            metavar = '<5\' trim length>')
 
-    trim_beg_ind = int(argv[2]) # 0-based index, so trim length = index of the first trimmed base
-    final_length = int(argv[3])
+    arg_parser.add_argument('final_length', type = int,
+                            metavar = '<final sequence length>')
 
-    o_stat_fn = argv[4]
-    o_fastq_fn = argv[5]
+    arg_parser.add_argument('o_stat_fn', metavar = '<output stats>')
 
-    i_fn_list = argv[6:]
+    arg_parser.add_argument('o_fastq_fn', metavar = '<output trimmed FASTQ file>')
 
-    trim_fastq(i_fn_list, trim_beg_ind, final_length, qcutoff, o_stat_fn, o_fastq_fn)
+    arg_parser.add_argument('i_fn_list', nargs = '+', 
+                            metavar = '<input fastq files (separated by space)>')
+    
+    args = arg_parser.parse_args()
+
+    trim_fastq(args.i_fn_list, args.trim_beg_ind, args.final_length, 
+               fastqutil.int_to_qscore(args.qc_int), args.o_stat_fn, 
+               args.o_fastq_fn)
 
 if __name__ == "__main__":
     main()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.7
 import unittest
 import env
-import src.trim_fastq_native as tf
+import src.trim_fastq as tf
 
 class TestTrimFastq(unittest.TestCase):
     def test_result(self):
