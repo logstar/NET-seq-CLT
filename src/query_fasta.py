@@ -34,10 +34,10 @@ def main():
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('se_fa_file', metavar = '<single entry fasta file>')
     arg_parser.add_argument('q_file_name', metavar = '<query coord numbp strand file>',
-                            help = 'A tab delimited file listing all queries.' 
-                                   'Fields from left to right are:'
+                            help = 'A tab delimited file listing all queries. ' 
+                                   'Fields from left to right are: '
                                    'coordinate, number of upstream bp, '
-                                   'number of downstream bp, strand')
+                                   'number of downstream bp, strand. No header.')
     arg_parser.add_argument('o_file_name', metavar = '<output file>')
 
     args = arg_parser.parse_args()
