@@ -162,7 +162,7 @@ def main():
 
     tseq_m_cnter_list = count_fastq_ref_match(args.fq_fn, target_seq_set)
 
-    tseq_m_cnt_list = map(lambda cnter: cnter.to_list(arg_parser.endSkipLen), tseq_m_cnter_list)
+    tseq_m_cnt_list = map(lambda cnter: cnter.to_list(args.endSkipLen), tseq_m_cnter_list)
 
     o_tbl_str = fmt_tseq_rec_m_cnt(tseq_rec_list, tseq_m_cnt_list)
 
