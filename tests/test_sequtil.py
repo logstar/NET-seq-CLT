@@ -122,6 +122,138 @@ class TestTargetSeqMatchLenCounter(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             tseq_cnter.to_list(-2, -1)
+
+
+
+class TestTargetSeqMatchCounter(unittest.TestCase):
+    def test_counter(self):
+        #                                      0123456
+        tseq_cnter = su.TargetSeqMatchCounter('ACGTACG')
+        self.assertEqual(len(tseq_cnter._m_sind_cnt_dict), 0)
+
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[0], 0)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[0], 0)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[1], 0)
+
+        tseq_cnter.add_query_seq('AC')
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[0], 1)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[1], 0)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[4], 1)
+
+        tseq_cnter.add_query_seq('CG')
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[1], 1)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[0], 1)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[2], 0)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[4], 1)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[5], 1)
+
+        tseq_cnter.add_query_seq('')
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[1], 1)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[0], 1)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[2], 0)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[4], 1)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[5], 1)
+
+
+        tseq_cnter.add_query_seq('ACATGACGT')
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[1], 1)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[0], 1)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[2], 0)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[4], 1)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[5], 1)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[6], 0)
+
+        tseq_cnter.add_query_seq('TA')
+        tseq_cnter.add_query_seq('TA')
+        tseq_cnter.add_query_seq('TA')
+        tseq_cnter.add_query_seq('TA')
+        tseq_cnter.add_query_seq('TA')
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[1], 1)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[0], 1)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[2], 0)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[3], 5)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[4], 1)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[5], 1)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[6], 0)
+
+        tseq_cnter.add_query_seq('CG')
+        tseq_cnter.add_query_seq('CG')
+        tseq_cnter.add_query_seq('CG')
+        tseq_cnter.add_query_seq('CG')
+        tseq_cnter.add_query_seq('CG')
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[1], 6)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[0], 1)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[2], 0)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[3], 5)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[4], 1)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[5], 6)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[6], 0)
+
+        tseq_cnter.add_query_seq('ACGTACG')
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[1], 6)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[0], 2)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[2], 0)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[3], 5)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[4], 1)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[5], 6)
+        self.assertEqual(tseq_cnter._m_sind_cnt_dict[6], 0)
+
+    def test_to_list(self):
+        #                                      0123456
+        tseq_cnter = su.TargetSeqMatchCounter('ACGTACG')
+        self.assertEqual(tseq_cnter.to_list(), 
+            [tseq_cnter._target_seq] + zip(xrange(0, 7), [0] * 7))
+        self.assertEqual(tseq_cnter.to_list(), 
+            [tseq_cnter._target_seq] + zip(xrange(0, 7), [0] * 7))
+        self.assertEqual(tseq_cnter.to_list(), 
+            [tseq_cnter._target_seq] + zip(xrange(0, 7), [0] * 7))
+
+        self.assertEqual(tseq_cnter.to_list(end_skip_len = 1), 
+            [tseq_cnter._target_seq] + zip(xrange(0, 6), [0] * 6))
+        self.assertEqual(tseq_cnter.to_list(end_skip_len = 2), 
+            [tseq_cnter._target_seq] + zip(xrange(0, 5), [0] * 5))
+
+        tseq_cnter.add_query_seq('CG')
+        self.assertEqual(tseq_cnter.to_list(), 
+            [tseq_cnter._target_seq] + zip(xrange(0, 7), [0, 1, 0, 0, 0, 1, 0]))
+        tseq_cnter.add_query_seq('CG')
+        self.assertEqual(tseq_cnter.to_list(), 
+            [tseq_cnter._target_seq] + zip(xrange(0, 7), [0, 2, 0, 0, 0, 2, 0]))
+
+        tseq_cnter.add_query_seq('ACGTACG')
+        tseq_cnter.add_query_seq('')
+        self.assertEqual(tseq_cnter.to_list(), 
+                         [tseq_cnter._target_seq] + zip(xrange(0, 7), [1, 2, 0, 0, 0, 2, 0]))
+
+        tseq_cnter.add_query_seq('ACATGACBDSP')
+        self.assertEqual(tseq_cnter.to_list(), 
+                         [tseq_cnter._target_seq] + zip(xrange(0, 7), [1, 2, 0, 0, 0, 2, 0]))
+
+        tseq_cnter.add_query_seq('ACGTACG')
+        tseq_cnter.add_query_seq('ACGTACG')
+        tseq_cnter.add_query_seq('ACGTACG')
+        tseq_cnter.add_query_seq('ACGTACG')
+        tseq_cnter.add_query_seq('ACGTACG')
+        self.assertEqual(tseq_cnter.to_list(), 
+                         [tseq_cnter._target_seq] + zip(xrange(0, 7), [6, 2, 0, 0, 0, 2, 0]))
+
+    def test_to_list_exceptions(self):
+        tseq_cnter = su.TargetSeqMatchCounter('ACGTACG')
+
+        with self.assertRaises(ValueError):
+            tseq_cnter.to_list(7)
+
+        with self.assertRaises(ValueError):
+            tseq_cnter.to_list(8)
+
+        with self.assertRaises(ValueError):
+            tseq_cnter.to_list(10)
+
+        with self.assertRaises(ValueError):
+            tseq_cnter.to_list(-1)
+
+        with self.assertRaises(ValueError):
+            tseq_cnter.to_list(-2)
         
 if __name__ == '__main__':
     unittest.main()
