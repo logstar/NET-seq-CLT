@@ -154,7 +154,6 @@ def main():
     arg_parser.add_argument('o_fn', metavar = '<output file>')
     
     args = arg_parser.parse_args()
-    print args.endSkipLen
     
     tseq_rec_list = parse_fa_query_result_file(args.fa_qres_fn, reverse = args.reverse, 
                                                complement = args.complement)
